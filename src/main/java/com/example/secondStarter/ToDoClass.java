@@ -9,14 +9,18 @@ public class ToDoClass {
     private String title;
     private String desc;
     private Date date;
+    private String identifier;
 
-    public ToDoClass(String title, String desc) {
+    public ToDoClass(String title, String desc,String identifier) {
         this.id = nextId++;
         this.title = title;
         this.desc = desc;
         this.date=new Date();
+        this.identifier = identifier;
     }
-
+public String getIdentifier(){
+        return identifier;
+}
     public Date getDate() {
         return date;
     }
@@ -69,4 +73,5 @@ public class ToDoClass {
                 ", desc='" + desc + '\'' +
                 '}';
     }
+
 }
