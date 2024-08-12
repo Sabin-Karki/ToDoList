@@ -14,29 +14,33 @@ public class ToDo {
     private final List<ToDoClass> toDoList = new ArrayList<>();
 
     public ToDo() {
-        toDoList.add(new ToDoClass("Sabin", "Initial task"));
-        toDoList.add(new ToDoClass("Karki", "Another task"));
-        toDoList.add(new ToDoClass("Okay", "Yet another task"));
+
     }
 
-    @GetMapping("/newTodo")
-    public String showList(Model model) {
+    @GetMapping("/{identifier}/newTodo")
+    public String showList(@PathVariable("identifier") String identifier, Model model) {
 //        model.addAttribute("List", toDoList);
+        List<ToDoClass> li = toDoList.stream().filter(t->t.getIdentifier().equals(identifier)).toList();
+
+        model.addAttribute("List", li);
+        model.addAttribute("userid", identifier);
         return "ToDoList"; // Return the Thymeleaf template
     }
 
-    @PostMapping("/newTodo/add")
-    public String add(String title, String desc, Model model) {
-        ToDoClass newTodo = new ToDoClass(title, desc);
+    @PostMapping("/{identifier}/newTodo/add")
+    public String add(@PathVariable("identifier") String identifier, String desc,String title,  Model model) {
+        ToDoClass newTodo = new ToDoClass(title, desc,identifier);
         toDoList.add(newTodo);
         model.addAttribute("List", toDoList);
+        model.addAttribute("userid", identifier);
         return "ToDoList"; // Return the updated list
     }
 
-    @GetMapping("/newTodo/delete/{id}")
-    public String delete(@PathVariable("id") int id, Model model) {
-        toDoList.removeIf(todo -> todo.getId() == id); // Remove the task if it exists
+    @GetMapping("/{identifier}/newTodo/delete/{id}")
+    public String delete(@PathVariable("identifier") String identifier ,@PathVariable("id") int id, Model model) {
+        toDoList.removeIf(todo -> todo.getId() == id && todo.getIdentifier().equals(identifier)); // Remove the task if it exists
         model.addAttribute("List", toDoList);
+        model.addAttribute("userid",identifier);
         return "ToDoList"; // Return the updated list
     }
 }
